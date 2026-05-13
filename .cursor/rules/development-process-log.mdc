@@ -1,0 +1,19 @@
+---
+alwaysApply: true
+---
+
+You need to create and update the file server/arbitrage/docs/development_process_log.md and, with each code change (in response to a new prompt), create a brief entry describing which task or bug was completed/fixed, the method of completion/fix, and the status of the implemented code: whether it is working or was redone, fixed, or a rollback to a previous version was performed.
+
+**Датасет SFT:** при добавлении новой строки в таблицу хронологии `development_process_log.md` **в той же сессии** создавать или обновлять соответствующий эпизод в `server/arbitrage/docs/my_work_dataset.json` по правилам `.cursor/rules/my-work-dataset-sft.mdc` (в т.ч. `schema_version` 2: обязательный `metrics_history`, опционально `objective`, `messages`, фрагменты кода, проценты с пересчётом по п.1–3). Для задач с кодом — **полнота `artifacts` / `touched_files`** по всем изменённым путям (см. раздел «Полнота покрытия файлов» в `my-work-dataset-sft.mdc`), не сокращать эпизод до пары файлов при реально большем диффе.
+
+**Содержание записи (согласовано с целью лога — меньше регрессий и повторов):**
+- Кратко **какой сценарий / симптом** был сломан или рисковал сломаться (например: «автономный boss без пакета server», «вкладка арбитража», «ZMQ symbol_detail»).
+- **Как проверили** после правки (команда, ручной шаг, что смотрели в логе) — хотя бы одна строка; если проверки не было — указать «проверка не запускалась» или «нужна runtime-проверка».
+- Если вариант **осознанно не подошёл** — отдельная строка со статусом вроде «Не сработало» / «Откат» и **одной фразой почему** (чтобы не повторять тот же тупик).
+
+This file must be analyzed before any new implementation to avoid repeating already tested but non-working solutions, as well as to eliminate additional searches for implementations of similar tasks that have already been solved.
+
+**Правила ведения лога (не нарушать):**
+- **Основной файл** `server/arbitrage/docs/development_process_log.md` — компактная таблица «Хронология» + неизменяемые справочные блоки (например диагностика ZMQ). Историю **не стирать без следа**: при сжатии переносить развёрнутые строки в архивный `.md` в том же каталоге (`development_process_log_archive_*.md`) и в основном файле оставить **одну строку-указатель** с датой переноса и именем архива.
+- **Только добавлять** новые строки в таблицу хронологии (дата, задача/баг, метод решения, статус). Не заменять старые формулировки новыми, если это затирает факт предыдущей попытки. Длинные стабильные цепочки фиксировать в канон-доках (`BASE_ARBITRAGE_LOGIC.md` и др.), в логе — ссылка одной строкой, без копирования всего объёма.
+- Если решение переделывалось или выполнялся откат — фиксировать это **отдельной записью** (например, статус «Переделано, работает» или «Откат»), не удаляя и не переписывая исходную запись о задаче (ни в основном файле, ни в архиве без явного запроса пользователя).

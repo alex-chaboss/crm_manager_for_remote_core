@@ -1,0 +1,12 @@
+---
+description: Контекст подпроекта CRM Remote Core (деплой на удалённый сервер)
+alwaysApply: true
+---
+
+# CRM Remote Core (`crm_manager_for_remote_core/`)
+
+- **Python:** для команд в этом репозитории использовать **`.venv/bin/python3`** (см. правило `python-venv-local.mdc`).
+- **Код:** пакет Python `crm/` (нижний регистр), точка входа `main.py`. Запрещены импорты из `server.*`, `neuro` и арбитражного канона — это отдельное приложение.
+- **Данные:** каталог `Projects/` в `.gitignore` репозитория; при первом запуске, если пусто, создаются скелеты `simple_*`. Бэкап `Projects/` — вручную. Краткая хронология правок: [`docs/development_process_log.md`](docs/development_process_log.md).
+- **Зеркала:** не требуются; не копировать правила `arbitrage-structure.mdc` дословно без адаптации под CRM.
+- **Деплой:** `remote_server_core` → копия в `boss_server` → `git push` → SSH на сервере (`git pull` + команда перезапуска).

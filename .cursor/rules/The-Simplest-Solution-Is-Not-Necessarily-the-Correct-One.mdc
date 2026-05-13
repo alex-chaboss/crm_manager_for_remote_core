@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+
+If there is an issue with displaying any data, the first step must be a deep analysis of how that data is processed and a search for the real reasons why that data might be missing, in order to eliminate them. Implementing a workaround in the form of a constant containing arbitrary data or a static list not backed by real data is not correct, even if it appears to make the feature work.

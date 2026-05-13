@@ -1,0 +1,41 @@
+# Python virtual environments
+.venv/
+venv/
+ENV/
+env/
+.python-version
+
+# Node / frontend
+node_modules/
+.pnpm-store/
+.yarn/
+**/.yarn/cache/
+**/.yarn/install-state.gz
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.pyo
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.tox/
+.hypothesis/
+.coverage
+htmlcov/
+
+# Packaging / build artifacts
+*.egg-info/
+.eggs/
+dist/
+build/
+wheels/
+pip-wheel-metadata/
+
+# IDE / local tooling (optional noise in AI context)
+.idea/
+.vscode/
+
+# Project runtime data (already gitignored; keep out of Cursor index)
+Projects/
+.cache/

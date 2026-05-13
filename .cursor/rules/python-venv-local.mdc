@@ -1,0 +1,16 @@
+---
+description: Локальный интерпретатор из .venv для всех Python-команд в этом репозитории
+alwaysApply: true
+---
+
+# Локальный Python (`.venv`)
+
+- **Корень:** виртуальное окружение лежит в каталоге **`.venv/`** от корня репозитория (`crm_manager_for_remote_core/`).
+- **Команды:** для любых действий агента с Python в этом проекте (запуск, `pip`, `pytest`, `py_compile`, `json.tool`, скрипты) использовать интерпретатор из venv:
+  - **`.venv/bin/python3`** (предпочтительно) или **`.venv/bin/python`**, путь от корня репозитория или абсолютный путь к нему.
+- **Не использовать** системный `python3` / `python` из PATH для задач этого репозитория, если каталог **`.venv` уже существует** — чтобы совпадали зависимости и версия PyQt6.
+- **Примеры:**  
+  `.venv/bin/python3 main.py`  
+  `.venv/bin/python3 -m pip install -r requirements.txt`  
+  `.venv/bin/python3 -m py_compile crm/*.py crm/gui/*.py main.py`
+- Если **`.venv` отсутствует** — создать один раз из корня репозитория: `python3 -m venv .venv`, затем `.venv/bin/python3 -m pip install -r requirements.txt` (или по инструкции пользователя).
