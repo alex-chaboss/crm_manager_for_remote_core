@@ -17,3 +17,4 @@ build/
 *.swp
 *~
 docs/development_process_log.md
+**/my_work_dataset.json
