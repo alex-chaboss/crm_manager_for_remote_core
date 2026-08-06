@@ -1,5 +1,11 @@
+# Working projects (never publish)
+/Projects/
 
-Projects/**
+# Local secrets (paths may be stored in profile; file contents must stay out of git)
+*.secrets
+*.secrets.txt
+**/crm_secrets.txt
+**/local_secrets.txt
 
 .cache/
 __pycache__/
@@ -18,3 +24,9 @@ build/
 *~
 docs/development_process_log.md
 **/my_work_dataset.json
+
+# Private-project Cursor rules (optional local; not part of public CRM)
+.cursor/rules/cube-puzzle-*.mdc
+
+# Local SFT / arbitrage scratch (not CRM product)
+/server/
