@@ -1,7 +1,7 @@
-"""Минимальный project-widget: только стандартное ядро вкладки «Настройки»."""
+"""Минимальный project-widget: контент проекта; настройки — через ⚙ на вкладке."""
 
 
 def build(parent, project_id: str, main_window):
-    from crm.gui.project_settings_core import ProjectSettingsCore
+    from crm.gui.project_settings_hint import ProjectSettingsHint
 
-    return ProjectSettingsCore(project_id, main_window, parent)
+    return ProjectSettingsHint(project_id, main_window, parent)

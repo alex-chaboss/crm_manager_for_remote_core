@@ -23,6 +23,9 @@ def main() -> int:
 
     app = QApplication(sys.argv)
     app.setApplicationName("CRM Remote Core")
+    from crm.gui.theme import apply_app_theme
+
+    apply_app_theme(app)
     win = MainWindow()
     win.show()
     return app.exec()

@@ -15,5 +15,15 @@ def project_dir(project_id: str) -> Path:
     return PROJECTS_DIR / project_id
 
 
+def project_cache_dir(project_id: str) -> Path:
+    return project_dir(project_id) / ".cache"
+
+
 def project_profile_path(project_id: str) -> Path:
+    """Канонический профиль проекта (автосохранение и кнопка «Сохранить»)."""
+    return project_cache_dir(project_id) / "project_profile.json"
+
+
+def legacy_project_profile_path(project_id: str) -> Path:
+    """Старый путь до переноса в .cache/ (миграция при загрузке)."""
     return project_dir(project_id) / "project_profile.json"

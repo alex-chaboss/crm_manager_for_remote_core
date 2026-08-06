@@ -37,5 +37,4 @@ pip-wheel-metadata/
 .vscode/
 
 # Project runtime data (already gitignored; keep out of Cursor index)
-Projects/
-.cache/
+

@@ -7,6 +7,7 @@ import re
 import shutil
 from pathlib import Path
 
+from crm.create_git_repo_template import render_create_git_repo_sh
 from crm.paths import PROJECTS_DIR
 
 logger = logging.getLogger(__name__)
@@ -20,35 +21,7 @@ PROJECT_ID_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9_-]{0,127}$")
 def _create_git_repo_template(project_root: Path, project_id: str) -> None:
     """Шаблон скрипта для инициализации bare + рабочей копии на сервере (запуск по SSH)."""
     path = project_root / "create_git_repo.sh"
-    text = f'''#!/bin/sh
-# CRM: инициализация git-пространства для проекта «{project_id}» на сервере.
-# Рекомендуемый запуск с машины разработчика (подставьте user@host и путь):
-#   ssh user@host 'bash -s' < Projects/{project_id}/create_git_repo.sh
-#
-# Перед запуском на сервере задайте базовый каталог (родитель boss_server и bare-репо):
-set -e
-CRM_SERVER_BASE="${{CRM_SERVER_BASE:?Задайте CRM_SERVER_BASE, например /var/crm/projects/{project_id}}}"
-BARE_NAME="${{BARE_NAME:-{project_id}.git}}"
-WORK_NAME="${{WORK_NAME:-boss_server}}"
-REMOTE_ALIAS="${{REMOTE_ALIAS:-deploy}}"
-
-cd "$CRM_SERVER_BASE"
-mkdir -p "$BARE_NAME"
-cd "$BARE_NAME"
-git init --bare
-
-cd "$CRM_SERVER_BASE"
-mkdir -p "$WORK_NAME"
-cd "$WORK_NAME"
-git init -b main 2>/dev/null || git init
-git remote add "$REMOTE_ALIAS" "../$BARE_NAME" 2>/dev/null || git remote set-url "$REMOTE_ALIAS" "../$BARE_NAME"
-echo "# {project_id}" > README_CRM_BOSS.md
-git add README_CRM_BOSS.md
-git commit -m "init CRM boss_server" || true
-git push -u "$REMOTE_ALIAS" HEAD:main || git push -u "$REMOTE_ALIAS" master
-echo "Готово: bare в $CRM_SERVER_BASE/$BARE_NAME, рабочая копия в $CRM_SERVER_BASE/$WORK_NAME"
-'''
-    path.write_text(text, encoding="utf-8")
+    path.write_text(render_create_git_repo_sh(project_id), encoding="utf-8")
     try:
         mode = path.stat().st_mode
         path.chmod(mode | 0o111)

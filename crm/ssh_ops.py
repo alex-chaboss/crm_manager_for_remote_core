@@ -1,11 +1,11 @@
-"""SSH: git pull на сервере и перезапуск."""
+"""SSH: команда на сервере (перезапуск и т.п.; git pull — hook post-update)."""
 
 from __future__ import annotations
 
 import logging
 import subprocess
 
-from crm.config_store import build_ssh_remote_command, ssh_port_for_cli
+from crm.config_store import build_ssh_restart_command, ssh_port_for_cli
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +53,7 @@ def ssh_restart(
 
 def ssh_restart_from_config(cfg: dict) -> tuple[bool, str]:
     host = (cfg.get("ssh_host") or "").strip()
-    cmd = build_ssh_remote_command(cfg)
+    cmd = build_ssh_restart_command(cfg)
     timeout_sec = float(cfg.get("ssh_command_timeout_sec") or 120)
     port, bad = ssh_port_for_cli(cfg.get("ssh_port"))
     if bad:

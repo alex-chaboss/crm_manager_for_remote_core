@@ -1,16 +1,22 @@
-#!/bin/sh
-# Канонический шаблон remote git (логика как исторический arbitrage/create_git_repo).
-# Переменные: MY_MAIN_PATH, PROJECT_NAME; опционально GIT_BRANCH, REMOTE_ALIAS.
-# Пример:
+"""Шаблон create_git_repo.sh (логика как scripts/create_git_repo.sh)."""
+
+
+def render_create_git_repo_sh(project_id: str) -> str:
+  """Параметры при запуске: MY_MAIN_PATH, PROJECT_NAME, опционально GIT_BRANCH, REMOTE_ALIAS."""
+  return f'''#!/bin/sh
+# CRM: инициализация bare remote git для проекта «{project_id}» на сервере.
+# Запуск с машины разработчика:
 #   export MY_MAIN_PATH=/var/www/html/crm_projects
-#   export PROJECT_NAME=cube_puzzle
-#   ssh user@host 'bash -s' < scripts/create_git_repo.sh
+#   export PROJECT_NAME={project_id}
+#   ssh user@host 'bash -s' < Projects/{project_id}/create_git_repo.sh
+#
+# MY_MAIN_PATH — базовый каталог; bare: $MY_MAIN_PATH/$PROJECT_NAME.git; рабочая копия: $MY_MAIN_PATH/$PROJECT_NAME
 
 set -e
-MY_MAIN_PATH="${MY_MAIN_PATH:?Задайте MY_MAIN_PATH, например /var/www/html/crm_projects}"
-PROJECT_NAME="${PROJECT_NAME:?Задайте PROJECT_NAME, например cube_puzzle}"
-GIT_BRANCH="${GIT_BRANCH:-master}"
-REMOTE_ALIAS="${REMOTE_ALIAS:-$PROJECT_NAME}"
+MY_MAIN_PATH="${{MY_MAIN_PATH:?Задайте MY_MAIN_PATH}}"
+PROJECT_NAME="${{PROJECT_NAME:-{project_id}}}"
+GIT_BRANCH="${{GIT_BRANCH:-master}}"
+REMOTE_ALIAS="${{REMOTE_ALIAS:-$PROJECT_NAME}}"
 
 cd "$MY_MAIN_PATH"
 echo ">>>>>>>>>>>>> cd to path : $MY_MAIN_PATH"
@@ -61,3 +67,4 @@ chmod 777 -R "$PROJECT_NAME"
 
 echo ">>>>>>>>>>>>> bare: $MY_MAIN_PATH/$PROJECT_NAME.git work: $MY_MAIN_PATH/$PROJECT_NAME"
 echo ">>>>>>>>>>>>> clone example: git clone ssh://user@host$MY_MAIN_PATH/$PROJECT_NAME.git boss_server"
+'''

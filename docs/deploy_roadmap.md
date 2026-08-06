@@ -1,19 +1,22 @@
 # Roadmap: деплой и инициализация проекта
 
-Краткий ориентир по развитию сценария «скелет → сервер → один клик деплой». Детали `project-widget` — в [project_widget_contract.md](project_widget_contract.md).
+Реализованный объём — [implementation_plan_deploy_settings_ui.md](implementation_plan_deploy_settings_ui.md). Контракт виджета — [project_widget_contract.md](project_widget_contract.md).
 
-## Уже есть
+## Реализовано
 
-- Скелет каталогов и **`create_git_repo.sh`** при создании проекта ([`crm/project_init.py`](../crm/project_init.py)).
-- Копирование **`remote_server_core` → `boss_server`**, `git commit` / `git push` и SSH pull + restart из формы настроек ([`crm/sync_deploy.py`](../crm/sync_deploy.py), [`crm/gui/project_settings_core.py`](../crm/gui/project_settings_core.py)).
+- `create_git_repo.sh` (`MY_MAIN_PATH`, `PROJECT_NAME`, hook post-update), [`crm/maintenance.py`](../crm/maintenance.py).
+- ⚙ **ProjectSettingsDialog**: Clone, Init, Деплой, тест **pre_deploy**, дерево `project_core`, Auto Sync.
+- **Файл секретов** (после кнопки Clone): локальный `.txt`/`.env` с строками `<$name>=значение` (по одной на строку; `#` — комментарий). Путь хранится в профиле проекта (`secrets_file_path`), значения только в RAM. При Init/Deploy сначала подстановка из файла, недостающие маркеры — прежние password-алерты. Кнопка «обновить» (иконка) перечитывает файл.
+- **OperationLogDialog** + **OperationRunner**: копирование лога, экспорт в файл, отмена subprocess, overlay на главном окне.
+- Списки команд с **`local-sh:`** (bash на ПК), **`local:`**, **`server:`**, ↑↓, merge global→project.
+- Проверка рабочей копии на сервере после push (`git status` по SSH).
 
-## Частично / в планах
+## Идеи на будущее
 
 | Направление | Описание |
 |-------------|----------|
-| SSH + bare + clone в `boss_server` одной кнопкой | Автоматический вызов шаблона `create_git_repo.sh` на сервере и привязка рабочей копии — отдельная задача (UX + безопасность + логирование). |
-| Манифест путей `project_core` → `remote_server_core` | Конфиг списка файлов/папок на проект, UI выбора, копирование только из списка перед sync (сейчас копирование в `remote_server_core` вручную или вне CRM). |
-| Кнопка «Деплой» | Объединённый сценарий: условное копирование по манифесту → sync/push → ожидание (таймер 10–20 с или сигнал по успеху push) → команда перезапуска (nginx, pm2, unit, кастом). |
-| Связка с `project-widget` | Опциональный хост-API или встраивание `ProjectSettingsCore` в кастом, чтобы не дублировать пути и SSH. |
+| Явное ожидание hook | Poll / retry вместо одного `git status` |
+| CI / уведомления | Webhook после push |
+| i18n в кастомных `project-widget` | По запросу |
 
-Этот файл не задаёт сроков; при реализации фич добавляйте строки в [development_process_log.md](development_process_log.md).
+При реализации — строка в [development_process_log.md](development_process_log.md).

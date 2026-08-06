@@ -3,7 +3,7 @@
 import site_ui
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 
-from crm.gui.project_settings_core import ProjectSettingsCore
+from crm.gui.project_settings_hint import ProjectSettingsHint
 
 
 class CRMProjectTab(QWidget):
@@ -11,7 +11,12 @@ class CRMProjectTab(QWidget):
 
     def __init__(self, project_id: str, main_window, parent=None):
         super().__init__(parent)
+        self._project_id = project_id
+        self._main = main_window
         lay = QVBoxLayout(self)
-        core = ProjectSettingsCore(project_id, main_window, self)
-        lay.addWidget(core, stretch=1)
-        lay.addWidget(site_ui.build_site_demo_block(self), stretch=0)
+        self._hint = ProjectSettingsHint(project_id, main_window, self)
+        lay.addWidget(self._hint, stretch=0)
+        lay.addWidget(site_ui.build_site_demo_block(self), stretch=1)
+
+    def apply_language(self) -> None:
+        self._hint.apply_language()
